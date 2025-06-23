@@ -2,6 +2,7 @@ from collections import deque, namedtuple
 import networkx as nx
 import matplotlib.pyplot as plt
 from collections.abc import Hashable
+from treelib import Tree
 
 def is_primitive_type (obj):
     return type(obj) in [int, float, bool, str, None]
@@ -101,3 +102,20 @@ class ExamineNestedObject:
         nx.draw(G, pos, with_labels=True, arrows=False, node_size=0,
             font_size=8, font_family='monospace', edge_color='gray', width=0.5)
         plt.show()
+        
+    def plot_tree(self):
+        """Plot the nested object as a tree using treelib"""
+        tree = Tree()
+        tree.create_node("root", "root")  # root node
+        
+        # Add each node to the tree with its parent
+        for node in self.child_parent_pair:
+            if node.parent != "root" and node.name != "root":
+                try:
+                    tree.create_node(node.name, node.name, parent=node.parent)
+                except:
+                    # Skip duplicate nodes
+                    pass
+                    
+        # Show the tree
+        tree.show()
